@@ -1,0 +1,27 @@
+# From https://github.com/hoilc/scoop-lemon/blob/master/.github/workflows/make_index.yml
+on:
+  workflow_dispatch:
+  schedule:
+  - cron: '59 */4 * * *'
+#   pull_request:
+#     types: [closed]
+name: update-readme
+jobs:
+  update-readme:
+    name: update-readme
+#     if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'
+    - uses: actions/checkout@master
+    - run: |
+        python makeindex.py
+    - uses: EndBug/add-and-commit@v7
+      with:
+        add: 'README.md'
+        # branch: master
+        # author_name: Ross Smith II
+        # author_email: ross@smithii.com
+        message: 'chore: update app index [ci skip]'
